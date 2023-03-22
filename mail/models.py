@@ -16,6 +16,7 @@ class Email(models.Model):
     read = models.BooleanField(default=False)
     archived = models.BooleanField(default=False)
 
+    # This function prepare data for the API request
     def serialize(self):
         return {
             "id": self.id,
