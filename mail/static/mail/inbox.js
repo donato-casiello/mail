@@ -33,6 +33,23 @@ function load_mailbox(mailbox) {
 
   // Show the mailbox name
   document.querySelector('#emails-view').innerHTML = `<h3>${mailbox.charAt(0).toUpperCase() + mailbox.slice(1)}</h3>`;
+  // Fetch the API
+  fetch(`/emails/${mailbox}?sort=-timestamp`)
+  .then(response => response.json())
+  .then(emails => {
+    // Create a list item for each email in the mailbox
+    emails.forEach(email => {
+      const div = document.createElement('div');
+      div.innerHTML = `${email.recipients}: ${email.subject} ->> date: ${email.timestamp}`;
+      if (email.read === false) {
+        div.className = 'read';
+      } else {
+        div.className = 'not-read';
+      }      
+      document.querySelector('#emails-view').append(div);
+      console.log(email.id);
+    });
+  })
 }
 
 function send_email(event){
@@ -55,7 +72,8 @@ function send_email(event){
   .then(result => {
     // Print result
     console.log(result);
+    // Display the sent mailbox
+    load_mailbox('sent');
   });
-  // Display the sent mailbox
-  load_mailbox('sent');
+  
 }
