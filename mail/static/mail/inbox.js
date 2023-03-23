@@ -47,6 +47,10 @@ function load_mailbox(mailbox) {
         div.className = 'not-read';
       }      
       document.querySelector('#emails-view').append(div);
+            // Add event listener to the div
+            div.addEventListener('click', function() {
+              console.log(`Click on the element ${email.id}`);
+            });
       console.log(email.id);
     });
   })
