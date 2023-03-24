@@ -86,7 +86,6 @@ function send_email(event){
 }
 
 function view_email(email_id){
-  var num = 0;
   // Fetch the API
   fetch(`/emails/${email_id}`)
   .then(response => response.json())
@@ -107,7 +106,7 @@ function view_email(email_id){
       <p><strong>Subject: </strong>${email.subject}</p>
       <p><strong>Timestamp: </strong>${email.timestamp}</p>
       <div class="d-flex flex-row justify-content-evenly">
-        <button class="btn btn-sm btn-outline-primary">Reply</button>
+        <button class="btn btn-sm btn-outline-primary" id="reply">Reply</button>
       </div>     
       <hr>
       <div>
@@ -123,9 +122,27 @@ function view_email(email_id){
         body: JSON.stringify({
         read: true
         })
-        }
+      }
       )};
-      });
+      
+      // Reply to an email
+      document.querySelector('#reply').addEventListener('click', () => {
+        console.log("Reply");
+        compose_email();
+        // Add value to the input field
+        document.querySelector('#compose-recipients').value = email.sender;
+        // Save the subject in a variable to not add to many Re: 
+            let subject = email.subject;
+            if(!subject.startsWith('Re: ')) {
+              subject = 'Re: ' + subject;
+            }
+            document.querySelector('#compose-subject').value = subject;
+            document.querySelector('#compose-body').value = `On ${email.timestamp} ${email.sender} wrote: \n ${email.body}\n\n`
+        });
+      })
+
+
+  
  
 }
 
@@ -149,7 +166,7 @@ function archive(id){
     .then(() => load_mailbox('inbox'))
   })
   });
-      }
+}
  
 
     
