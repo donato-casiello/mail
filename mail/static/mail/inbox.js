@@ -43,12 +43,13 @@ function load_mailbox(mailbox) {
     emails.forEach(email => {
 
       // Create a new element
-      const newEmail = document.createElement('div');
-      newEmail.className = "list-group-item";
-      newEmail.innerHTML = `From ${email.sender}: ${email.subject} ->> date: ${email.timestamp}`;
+      let newEmail = document.createElement('div');
+      newEmail.className = 'container';
+      newEmail.innerHTML = `
+      <h5>From ${email.sender}</h5> <h4>${email.subject}</h4>  <p id="timestamp">${email.timestamp}</p>`;
 
       // Change background color 
-      newEmail.className = email.read ? 'read' : 'not-read';  
+      newEmail.className = email.read ? 'container read' : 'container not-read';  
 
       // Add event listener to the div to open the detail view
       newEmail.addEventListener('click', () => view_email(email.id));
@@ -106,7 +107,7 @@ function view_email(email_id){
       <p><strong>Subject: </strong>${email.subject}</p>
       <p><strong>Timestamp: </strong>${email.timestamp}</p>
       <div class="d-flex flex-row justify-content-evenly">
-        <button class="btn btn-sm btn-outline-primary" id="reply">Reply</button>
+        <button class="btn btn-sm btn-secondary" id="reply">Reply</button>
       </div>     
       <hr>
       <div>
