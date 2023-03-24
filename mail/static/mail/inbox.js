@@ -93,43 +93,63 @@ function view_email(email_id){
   .then(email => {
       // Print email
       console.log(email);
-
+      // Clear the div
+      document.querySelector('#email-detail').innerHTML = '';
       // Display the email-detail view and hide the others
       document.querySelector('#email-detail').style.display = 'block';
       document.querySelector('#emails-view').style.display = 'none';
       document.querySelector('#compose-view').style.display = 'none';
       
       // Add the email data to html
-      document.querySelector('#sender').innerHTML =  email.sender;
-      document.querySelector('#recipient').innerHTML = email.recipients;
-      document.querySelector('#subject').innerHTML = email.subject;
-      document.querySelector('#timestamp').innerHTML = email.timestamp;
-      document.querySelector('#body').innerHTML = email.body;
-
-
-      // Archived or unarchived logic
-      const button_archive = document.createElement('button');
-      button_archive.innerHTML = email.archived ? "Unarchive" : "Archive";
-      document.querySelector('#email-detail').append(button_archive)
-
-      button_archive.addEventListener('click', function() {
-        num ++;
-        console.log(num);
-
-      });
+      document.querySelector('#email-detail').innerHTML =  `
+      <p id='sender'><strong>From: </strong>${email.sender}</p>
+      <p><strong>To: </strong>${email.recipients}</p>
+      <p><strong>Subject: </strong>${email.subject}</p>
+      <p><strong>Timestamp: </strong>${email.timestamp}</p>
+      <div class="d-flex flex-row justify-content-evenly">
+        <button class="btn btn-sm btn-outline-primary">Reply</button>
+      </div>     
+      <hr>
+      <div>
+        <p>${email.body}</p>
+      </div>
+      `;
+      archive(email.id);
 
       // Mark the email as read
-      ///if(!email.read) {
-      //fetch(`/emails/${email.id}`, {
-        //method: 'PUT',
-        //body: JSON.stringify({
-        //read: true
-        //})
-        //}
-      //)};
-
-    });
+      if(!email.read) {
+      fetch(`/emails/${email.id}`, {
+        method: 'PUT',
+        body: JSON.stringify({
+        read: true
+        })
+        }
+      )};
+      });
+ 
 }
 
-      
+function archive(id){
+  fetch(`/emails/${id}`)
+  .then(response => response.json())
+  .then(email => {
+  // Archived or unarchived logic
+  let button_archive = document.createElement('button');
+  button_archive.innerHTML = email.archived ? "Unarchive" : "Archive";
+  button_archive.className = email.archived ? "btn btn-success" : "btn btn-danger"
+  document.querySelector('#email-detail').append(button_archive);
 
+  button_archive.addEventListener('click', function() {
+    fetch(`/emails/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify({
+          archived: !email.archived
+      })
+    })
+    .then(() => load_mailbox('inbox'))
+  })
+  });
+      }
+ 
+
+    

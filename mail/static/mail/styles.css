@@ -11,3 +11,14 @@ textarea {
     background-color: white;
     margin: 2px;
 }
+
+.btn-danger {
+    position: relative;
+    left: 100%;
+}
+
+
+.btn-success {
+    position: relative;
+    left: 100%;
+}
