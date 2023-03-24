@@ -4,10 +4,10 @@ textarea {
 
 .read {
     background-color: rgb(155, 153, 153);
-    border: 1px solid;
+    margin: 2px;
 }
 
 .not-read {
     background-color: white;
-    border: 1px solid;
+    margin: 2px;
 }
